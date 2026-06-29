@@ -18,5 +18,5 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git add output.csv
-          git commit -m "Auto-generated output"
-          git push
+          git commit -m "Auto-generated output" || echo "No changes to commit"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
