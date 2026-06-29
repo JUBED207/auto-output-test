@@ -1,4 +1,4 @@
-name: Run Python and Commit Output
+name: Run Python and Save Output
 on:
   push:
     branches: [main]
@@ -13,10 +13,8 @@ jobs:
           python-version: '3.12'
       - name: Run Python script
         run: python generate.py
-      - name: Commit output
-        run: |
-          git config user.email "action@github.com"
-          git config user.name "GitHub Action"
-          git add output.csv
-          git commit -m "Auto-generated output" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+      - name: Upload output file
+        uses: actions/upload-artifact@v3
+        with:
+          name: output-csv
+          path: output.csv
