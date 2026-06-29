@@ -1,8 +1,8 @@
 name: Run Python and Save Output
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'  # Runs daily at 6 AM UTC
+  workflow_dispatch:     # Manual button
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -13,8 +13,10 @@ jobs:
           python-version: '3.12'
       - name: Run Python script
         run: python generate.py
-      - name: Upload output file
-        uses: actions/upload-artifact@v4
-        with:
-          name: output-csv
-          path: output.csv
+      - name: Commit and push
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add output.csv
+          git commit -m "Auto-generated output at $(date)" || echo "No changes"
+          git push
