@@ -1,0 +1,22 @@
+name: Run Python and Commit Output
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run Python script
+        run: python generate.py
+      - name: Commit output
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add output.csv
+          git commit -m "Auto-generated output"
+          git push
