@@ -6,6 +6,8 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -18,5 +20,7 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git add output.csv
-          git commit -m "Auto-generated output at $(date)" || echo "No changes"
+          git commit -m "Auto-generated output" || echo "No changes"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
